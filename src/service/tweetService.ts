@@ -74,3 +74,24 @@ export async function uploadTweet(_: unknown, formData: FormData) {
     redirect(`/tweets/${tweet.id}`);
   }
 }
+
+export async function getTweetDetail(tweetId: number) {
+  const tweet = await db.tweet.findUnique({
+    where: {
+      id: tweetId,
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+      _count: {
+        select: {
+          responses: true,
+        },
+      },
+    },
+  });
+  return tweet;
+}
